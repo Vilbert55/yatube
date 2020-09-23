@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load user_filters %}
+{% block title %} {% if post %}Редактировать{% else %}Новая запись{% endif %}{% endblock %}
+{% block content %}
+{% load user_filters %}
+{% if user.is_authenticated %}
+
+  <div class="card my-4">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <h5 class="card-header">{% if post %}Редактировать{% else %}Новый пост{% endif %}</h5>
+      <div class="card-body">
+        <form>
+          <div class="form-group">                
+            {{ form.as_p }}
+          </div>
+          <button type="submit" class="btn btn-primary">Отправить</button>
+        </form>
+      </div>
+    </form>
+  </div>
+
+{% else %}
+  Для добавления постов <a class="p-2 text-dark" href="{% url 'login' %}">Войдите</a> или <a class="p-2 text-dark" href="{% url 'signup' %}">Зарегестрируйтесь</a>
+{% endif %}
+{% endblock %}

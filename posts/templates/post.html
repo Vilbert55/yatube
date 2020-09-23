@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Пост {{ post.author }}{% endblock %}
+{% block content %}
+{% load thumbnail %}
+
+<div class="col-md-9">
+  {% include "post_item.html" with post=post %}
+  {% include "comments.html" with items=page paginator=paginator %}
+</div>
+
+{% endblock %}

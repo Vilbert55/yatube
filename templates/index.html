@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Последние обновления{% endblock %}
+{% block content %}
+
+    <div class="container">
+        {% include "menu.html" with index=True %}
+
+        <h1 align="center" style="margin-top:25px; margin-bottom:25px;">
+            {% if order == '-comments_count' %}
+                Самые комментируемые посты
+            {% else %}
+                Последние обновления на сайте
+            {% endif %}
+        </h1>
+        <hr>
+        <!-- Вывод ленты записей -->
+        {%if page%}
+            {% load cache %}
+            {% cache 5 index_page request.GET%}
+
+            {% for post in page %}
+                {% include "post_item.html" with post=post %}
+            {% endfor %}
+
+
+            {% if page.has_other_pages %}
+                {% include "paginator.html" with items=page paginator=paginator%}
+            {% endif %}
+            {% endcache %}
+        {%endif%}
+    </div>
+
+{% endblock %}

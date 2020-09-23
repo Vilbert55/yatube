@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Профиль пользователя {{ author }}{% endblock %}
+{% block content %}
+{% load thumbnail %}
+<main role="main" class="container">
+	<div class="row">
+		<div class="col-md-3 mb-3 mt-1">
+			<div class="card">
+				<div class="card-body">
+					<div class="h2">
+					<!-- Имя автора -->
+						{{author.get_full_name}}
+					</div>
+					<div class="h3 text-muted">
+					<!-- username автора -->
+						{{author}}
+					</div>
+				</div>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">
+						<div class="h6 text-muted">
+							Подписчиков: {{author.following.count}} <br />
+							Подписан: {{author.follower.count}} <br/>
+							{% if following and user.is_authenticated%}
+								<a class="btn btn-lg btn-light" href="{% url 'profile_unfollow' author %}" role="button">
+									Отписаться
+								</a>
+							{% elif user != author %}  {# если юзер зайдет на свой профайл (user=author), не выполнится ни одно из условий и кнопки не будет вовсе #}
+								<a class="btn btn-lg btn-primary" href="{% url 'profile_follow' author %}" role="button">
+									Подписаться    {# если незалогиненый юзер захочет подписаться, его перенаправит на страницу логина #}
+								</a>
+							{% endif %}
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div class="h6 text-muted">
+						<!-- Количество записей -->
+							Записей: {{post_count}}
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-md-9">
+			{%for post in page%}
+			<!-- Начало блока с отдельным постом -->
+				{% include "post_item.html" with post=post %}
+			{% endfor %}
+			<!-- Остальные посты -->
+			{% if page.has_other_pages %}
+				{% include "paginator.html" with items=page paginator=paginator%}
+			{% endif %}
+			<!-- Здесь постраничная навигация паджинатора -->
+	    </div>
+	</div>
+</main>
+{% endblock %}

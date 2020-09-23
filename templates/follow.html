@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Подписки{% endblock %}
+{% block content %}
+    <div class="container">
+        {% include "menu.html" with follow=True %}
+        <h1 align="center" style="margin-top:25px; margin-bottom:25px;">Подписки</h1>
+        <!-- Вывод подписок -->
+        {%if page%}
+            {% load cache %}
+            {% cache 15 follow_page %}
+
+            {% for post in page %}
+                {% include "post_item.html" with post=post %}
+            {% endfor %}
+            {% endcache %}
+            {% if page.has_other_pages %}
+                {% include "paginator.html" with items=page paginator=paginator%}
+            {% endif %}
+        {%else%}
+            Вы ни на кого не подписаны
+        {%endif%}
+    </div>
+{% endblock %}
